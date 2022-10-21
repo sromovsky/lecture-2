@@ -2,11 +2,13 @@ class RaceTrack {
     private trackName: String;
     private trackLenght: Number;
     private trackCorners: Number;
+    private trackLaps: Number;
 
-    constructor(trackName: String, trackLenght: Number, trackCorners: Number) {
+    constructor(trackName: String, trackLenght: Number, trackCorners: Number, trackLaps: Number) {
         this.trackName = trackName;
         this.trackLenght = trackLenght;
         this.trackCorners = trackCorners;
+        this.trackLaps = trackLaps;
     }
 
     getTrackName() {
@@ -17,6 +19,9 @@ class RaceTrack {
     }
     getTrackCorners() {
         return this.trackCorners;
+    }
+    getTrackLaps() {
+        return this.trackLaps;
     }
 }
 
@@ -85,20 +90,78 @@ class Team {
     }
 }
 
-class Race {
+class Qualifying {
     private raceTrack: RaceTrack;
     private teams: Team[];
+    private qualifyingPositions: Driver[];
 
     constructor(raceTrack: RaceTrack, teams: Team[]) {
         this.raceTrack = raceTrack;
         this.teams = teams;
+        this.qualifyingPositions = [];
+        [...this.teams].forEach((key, index) => {
+            this.qualifyingPositions.push(key.getTeamMember1());
+            this.qualifyingPositions.push(key.getTeamMember2());
+        });
+        this.shuffle(this.qualifyingPositions);
     }
 
+    getRaceTrack() {
+        return this.raceTrack;
+    }
+    getTeams() {
+        return this.teams;
+    }
+    getQualifyingPositions() {
+        return this.qualifyingPositions;
+    }
 
+    //shuffle() function from:
+    //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    private shuffle(array: Driver[]) {
+        let currentIndex = array.length,  randomIndex;
+      
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+      
+          // Pick a remaining element.
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+      
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+    }
+}
+
+class Race {
+    private qualifyingResult: Qualifying;
+
+    constructor(qualifyingResult: Qualifying) {
+        this.qualifyingResult = qualifyingResult;
+    }
+
+    runRace() {
+        let currentLap: Number = 0;
+        let totalLaps: Number = this.qualifyingResult.getRaceTrack().getTrackLaps();
+        let trackPositions = this.qualifyingResult.getQualifyingPositions();
+
+        while(currentLap <= totalLaps) {
+            
+        }
+
+    }
+
+    private calculateProbabilityOfOvertake(driver1: Driver, driver2: Driver) {
+        
+    }
 }
 
 //Racing track creation
-const Spa = new RaceTrack('Spa-Francorchamps', 7004, 19);
+const Spa = new RaceTrack('Spa-Francorchamps', 7004, 19, 44);
 
 //Formula creation
 const RedbullFormula = new Formula('RB18', 9, 10);
@@ -146,6 +209,10 @@ const HaasTeam = new Team('Haas', HaasFormula, KevinMagnussen, MickSchumacher);
 const AlphaTauriTeam = new Team('AlphaTauri', AlphaTauriFormula, PierreGasly, YukiTsunoda);
 const WilliamsTeam = new Team('Williams', WilliamsFormula, NicholasLatifi, AlexanderAlbon);
 
-//Create race object
-const SpaRace = new Race(Spa, [RedBullTeam, FerrariTeam, MercedesTeam, AlpineTeam, McLarenTeam, AlfaRomeoTeam, AstonMartinTeam, HaasTeam, AlphaTauriTeam, WilliamsTeam]);
+//Create qualifying object
+const SpaQualifying = new Qualifying(Spa, [RedBullTeam, FerrariTeam, MercedesTeam, AlpineTeam, McLarenTeam, AlfaRomeoTeam, AstonMartinTeam, HaasTeam, AlphaTauriTeam, WilliamsTeam]);
 
+//Create race object
+const SpaRace = new Race(SpaQualifying);
+
+console.log(SpaQualifying.getQualifyingPositions());
