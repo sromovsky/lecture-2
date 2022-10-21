@@ -124,7 +124,6 @@ class Qualifying {
         //Simulate starting positions of drivers
         for (let i = 0; i < 20; i++) {
             let currentIndex = array.length - 1;
-            console.log(currentIndex);
             while (currentIndex != 0) {
                 currentIndex--;
                 //Overtaking driver can get "skill boost" helping them overtake
@@ -155,10 +154,26 @@ class Race {
         let lapLength: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
         let trackPositions = this.qualifyingResult.getQualifyingPositions();
 
-        while (currentLap <= totalLaps) {
-
+        while (currentLap < totalLaps) {
+            currentLap++;
+            console.log(`Start of Lap ${currentLap} out of ${totalLaps}`);
+            for (var i in trackPositions) {
+                console.log((parseInt(i) + 1) + ") " + trackPositions[i].getDriverName());
+            }
+            console.log("----------------------------------------------------------");
+            console.log(`Lap ${currentLap} details:`)
+            for(var j: number = 0; j > lapLength; j++) {
+                
+            }
+            console.log("----------------------------------------------------------");
         }
-
+        console.log("Race finished!\nResults:")
+        for (var i in trackPositions) {
+            console.log((parseInt(i) + 1) + ") " + trackPositions[i].getDriverName());
+        }
+        console.log("----------------------------------------------------------");
+        console.log(`Race winner is ${trackPositions[0].getDriverName()}!`)
+        console.log("----------------------------------------------------------");
     }
 
     private calculateProbabilityOfOvertake(driver1: Driver, driver2: Driver) {
@@ -242,3 +257,4 @@ const SpaQualifying = new Qualifying(Spa, DriversArray);
 const SpaRace = new Race(SpaQualifying);
 
 printIntro();
+SpaRace.runRace();
