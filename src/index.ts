@@ -1,12 +1,12 @@
 class RaceTrack {
     private trackName: string;
-    private trackLenght: number;
+    private trackLength: number;
     private trackCorners: number;
     private trackLaps: number;
 
-    constructor(trackName: string, trackLenght: number, trackCorners: number, trackLaps: number) {
+    constructor(trackName: string, trackLength: number, trackCorners: number, trackLaps: number) {
         this.trackName = trackName;
-        this.trackLenght = trackLenght; //in kilometers
+        this.trackLength = trackLength; //in kilometers
         this.trackCorners = trackCorners;
         this.trackLaps = trackLaps;
     }
@@ -15,7 +15,7 @@ class RaceTrack {
         return this.trackName;
     }
     getTrackLength() {
-        return this.trackLenght;
+        return this.trackLength;
     }
     getTrackCorners() {
         return this.trackCorners;
@@ -68,7 +68,6 @@ class Driver {
         return this.team;
     }
 }
-
 class Team {
     private teamName: string;
     private formula: Formula;
@@ -110,27 +109,34 @@ class Qualifying {
     getQualifyingPositions() {
         return this.qualifyingPositions;
     }
-    getQualifyingPosition(index: number){
+    getQualifyingPosition(index: number) {
         return this.qualifyingPositions[index];
-    } 
+    }
 
     //shuffle() function from:
     //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    //Using drivers skill level determine semi-randomly starting position of drivers
     private shuffle(array: Driver[]) {
-        let currentIndex = array.length,  randomIndex;
-      
-        // While there remain elements to shuffle.
-        while (currentIndex != 0) {
-      
-          // Pick a remaining element.
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-      
-          // And swap it with the current element.
-          [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+
+        //Order drivers by their skill level
+        array.sort((a, b) => b.getSkillLevel() - a.getSkillLevel());
+
+        //Simulate starting positions of drivers
+        for (let i = 0; i < 20; i++) {
+            let currentIndex = array.length - 1;
+            console.log(currentIndex);
+            while (currentIndex != 0) {
+                currentIndex--;
+                //Overtaking driver can get "skill boost" helping them overtake
+                var randomChanceToOvertake: number = Math.floor(array[currentIndex].getSkillLevel() + (Math.random() * (20 - 3) + 3));
+                if (currentIndex === 0) {
+                    break;
+                } else if (array[currentIndex - 1].getSkillLevel() < randomChanceToOvertake) {
+                    [array[currentIndex], array[currentIndex - 1]] = [array[currentIndex - 1], array[currentIndex]];
+                }
+            }
         }
-      
+
         return array;
     }
 
@@ -146,18 +152,36 @@ class Race {
     runRace() {
         let currentLap: number = 0;
         let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
-        let lapLenght: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
+        let lapLength: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
         let trackPositions = this.qualifyingResult.getQualifyingPositions();
 
-        while(currentLap <= totalLaps) {
-            
+        while (currentLap <= totalLaps) {
+
         }
 
     }
 
     private calculateProbabilityOfOvertake(driver1: Driver, driver2: Driver) {
-        
+
     }
+}
+
+function printIntro() {
+    console.log("----------------------------------------------------------")
+    console.log(`! Selected circuit: ${SpaQualifying.getRaceTrack().getTrackName()}`)
+    console.log(`-> Circuit length: ${SpaQualifying.getRaceTrack().getTrackLength()}Km`)
+    console.log(`-> Circuit laps: ${SpaQualifying.getRaceTrack().getTrackLaps()}`)
+    console.log(`-> Circuit corners: ${SpaQualifying.getRaceTrack().getTrackCorners()}`)
+    console.log("----------------------------------------------------------")
+    console.log(`! Simulating qualifying at ${SpaQualifying.getRaceTrack().getTrackName()}`)
+    console.log("----------------------------------------------------------")
+    console.log("Qualifying Results:");
+    for (var i in SpaQualifying.getQualifyingPositions()) {
+        console.log((parseInt(i) + 1) + ") " + SpaQualifying.getQualifyingPosition(parseInt(i)).getDriverName());
+    }
+    console.log("----------------------------------------------------------")
+    console.log(`! Starting race at ${SpaQualifying.getRaceTrack().getTrackName()}`)
+    console.log("----------------------------------------------------------")
 }
 
 //Racing track creation - Data Source: https://www.formula1.com/en/information.belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw.html
@@ -217,18 +241,4 @@ const SpaQualifying = new Qualifying(Spa, DriversArray);
 //Create race object
 const SpaRace = new Race(SpaQualifying);
 
-console.log("----------------------------------------------------------")
-console.log(`! Selected circuit: ${SpaQualifying.getRaceTrack().getTrackName()}`)
-console.log(`-> Circuit lenght: ${SpaQualifying.getRaceTrack().getTrackLength()}Km`)
-console.log(`-> Circuit laps: ${SpaQualifying.getRaceTrack().getTrackLaps()}`)
-console.log(`-> Circuit corners: ${SpaQualifying.getRaceTrack().getTrackCorners()}`)
-console.log("----------------------------------------------------------")
-console.log(`! Simulating qualifying at ${SpaQualifying.getRaceTrack().getTrackName()}`)
-console.log("----------------------------------------------------------")
-console.log("Qualifying Results:");
-for(var i in SpaQualifying.getQualifyingPositions() ) {
-    console.log((parseInt(i)+1) +") "+ SpaQualifying.getQualifyingPosition(parseInt(i)).getDriverName());
-}
-console.log("----------------------------------------------------------")
-console.log(`! Starting race at ${SpaQualifying.getRaceTrack().getTrackName()}`)
-console.log("----------------------------------------------------------")
+printIntro();
