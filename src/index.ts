@@ -15,5 +15,7 @@ class Player{
     this.PlayerRanking= PlayerRanking;
     this.PlayerRankingPoints= PlayerRankingPoints;
 }
-const NovakDjokovic= new Player('Novak Djokovic', 'Serbia', 1, )
+const CarlosAlcaraz= new Player('Carlos Alcaraz', 'Spain', 1, 6730)
+const NovakDjokovic= new Player('Novak Djokovic', 'Serbia', 7, 4320);
+
 class
