@@ -162,8 +162,8 @@ class Race {
             }
             console.log("----------------------------------------------------------");
             console.log(`Lap ${currentLap} details:`)
-            for(var j: number = 0; j > lapLength; j++) {
-                
+            for (var j: number = 0; j > lapLength; j++) {
+
             }
             console.log("----------------------------------------------------------");
         }
@@ -229,7 +229,7 @@ const WilliamsTeam = new Team('Williams', WilliamsFormula);
 //Driver creation, skill data from: https://www.ea.com/games/f1/f1-22/driver-ratings/ratings-database
 const SergioPerez = new Driver('Sergio Perez', 87, RedBullTeam);
 const MaxVerstappen = new Driver('Max Verstappen', 96, RedBullTeam);
-const CarlosSainz = new Driver('Carlos Sainz', 89, FerrariTeam);
+const CarlosSainz = new Driver('Carlos Sainz', 89, FerrariTeaßm);
 const CharlesLecrelc = new Driver('Charles Leclerc', 92, FerrariTeam);
 const GeorgeRussell = new Driver('George Russell', 91, MercedesTeam);
 const LewisHamilton = new Driver('Lewis Hamilton', 94, MercedesTeam);
