@@ -1,12 +1,12 @@
 class RaceTrack {
-    private trackName: String;
-    private trackLenght: Number;
-    private trackCorners: Number;
-    private trackLaps: Number;
+    private trackName: string;
+    private trackLenght: number;
+    private trackCorners: number;
+    private trackLaps: number;
 
-    constructor(trackName: String, trackLenght: Number, trackCorners: Number, trackLaps: Number) {
+    constructor(trackName: string, trackLenght: number, trackCorners: number, trackLaps: number) {
         this.trackName = trackName;
-        this.trackLenght = trackLenght;
+        this.trackLenght = trackLenght; //in kilometers
         this.trackCorners = trackCorners;
         this.trackLaps = trackLaps;
     }
@@ -26,11 +26,11 @@ class RaceTrack {
 }
 
 class Formula {
-    private formulaName: String;
-    private speed: Number;
-    private breaking: Number;
+    private formulaName: string;
+    private speed: number;
+    private breaking: number;
 
-    constructor(formulaName: String, speed: Number, breaking: Number) {
+    constructor(formulaName: string, speed: number, breaking: number) {
         this.formulaName = formulaName;
         this.speed = speed;
         this.breaking = breaking;
@@ -39,21 +39,23 @@ class Formula {
     getFormulaName() {
         return this.formulaName;
     }
-    getSpeed(){
+    getSpeed() {
         return this.speed;
     }
-    getBreaking(){
+    getBreaking() {
         return this.breaking;
     }
 }
 
 class Driver {
-    private driverName: String;
-    private skillLevel: Number;
+    private driverName: string;
+    private skillLevel: number;
+    private team: Team;
 
-    constructor(driverName: String, skillLevel: Number) {
+    constructor(driverName: string, skillLevel: number, team: Team) {
         this.driverName = driverName;
         this.skillLevel = skillLevel;
+        this.team = team;
     }
 
     getDriverName() {
@@ -62,19 +64,19 @@ class Driver {
     getSkillLevel() {
         return this.skillLevel;
     }
+    getTeamName() {
+        return this.team;
+    }
 }
 
 class Team {
-    private teamName: String;
+    private teamName: string;
     private formula: Formula;
-    private teamMember1: Driver;
-    private teamMember2: Driver;
 
-    constructor(teamName: String, formula: Formula, teamMember1: Driver, teamMember2: Driver) {
+    constructor(teamName: string, formula: Formula) {
         this.teamName = teamName;
         this.formula = formula;
-        this.teamMember1 = teamMember1;
-        this.teamMember2 = teamMember2;
+
     }
     getTeamName() {
         return this.teamName;
@@ -82,26 +84,19 @@ class Team {
     getFormula() {
         return this.formula;
     }
-    getTeamMember1() {
-        return this.teamMember1;
-    }
-    getTeamMember2() {
-        return this.teamMember2;
-    }
 }
 
 class Qualifying {
     private raceTrack: RaceTrack;
-    private teams: Team[];
+    private drivers: Driver[];
     private qualifyingPositions: Driver[];
 
-    constructor(raceTrack: RaceTrack, teams: Team[]) {
+    constructor(raceTrack: RaceTrack, drivers: Driver[]) {
         this.raceTrack = raceTrack;
-        this.teams = teams;
+        this.drivers = drivers;
         this.qualifyingPositions = [];
-        [...this.teams].forEach((key, index) => {
-            this.qualifyingPositions.push(key.getTeamMember1());
-            this.qualifyingPositions.push(key.getTeamMember2());
+        [...this.drivers].forEach((key, index) => {
+            this.qualifyingPositions.push(key);
         });
         this.shuffle(this.qualifyingPositions);
     }
@@ -109,12 +104,15 @@ class Qualifying {
     getRaceTrack() {
         return this.raceTrack;
     }
-    getTeams() {
-        return this.teams;
+    getDrivers() {
+        return this.drivers;
     }
     getQualifyingPositions() {
         return this.qualifyingPositions;
     }
+    getQualifyingPosition(index: number){
+        return this.qualifyingPositions[index];
+    } 
 
     //shuffle() function from:
     //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -135,6 +133,7 @@ class Qualifying {
       
         return array;
     }
+
 }
 
 class Race {
@@ -145,8 +144,9 @@ class Race {
     }
 
     runRace() {
-        let currentLap: Number = 0;
-        let totalLaps: Number = this.qualifyingResult.getRaceTrack().getTrackLaps();
+        let currentLap: number = 0;
+        let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
+        let lapLenght: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
         let trackPositions = this.qualifyingResult.getQualifyingPositions();
 
         while(currentLap <= totalLaps) {
@@ -160,8 +160,8 @@ class Race {
     }
 }
 
-//Racing track creation
-const Spa = new RaceTrack('Spa-Francorchamps', 7004, 19, 44);
+//Racing track creation - Data Source: https://www.formula1.com/en/information.belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw.html
+const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
 
 //Formula creation
 const RedbullFormula = new Formula('RB18', 9, 10);
@@ -175,44 +175,60 @@ const HaasFormula = new Formula('VF-22', 5, 7);
 const AlphaTauriFormula = new Formula('AT03', 7, 4);
 const WilliamsFormula = new Formula('FW44', 5, 5);
 
-//Driver creation
-const SergioPerez = new Driver('Sergio Perez', 9.8);
-const MaxVerstappen = new Driver('Max Verstappen', 9.9);
-const CarlosSainz = new Driver('Carlos Sainz', 9.5);
-const CharlesLecrelc = new Driver('Charles Leclerc', 9.7);
-const GeorgeRussell = new Driver('George Russell', 9);
-const LewisHamilton = new Driver('Lewis Hamilton', 9.8);
-const FernandoAlonso = new Driver('Fernando Alonso', 9.8);
-const EstebanOcon = new Driver('Esteban Ocon', 8.5);
-const LandoNorris = new Driver('Lando Norris', 9.2);
-const DanielRicciardo = new Driver('Daniel Ricciardo', 7.9);
-const ValtteriBottas = new Driver('Valtteri Bottas', 9.4);
-const ZhouGuanyu = new Driver('Zhou Guanyu', 8);
-const LanceStroll = new Driver('Lance Stroll', 7.5);
-const SebastianVettel = new Driver('Sebastian Vettel', 9.5);
-const KevinMagnussen = new Driver('Kevin Magnussen', 7.9);
-const MickSchumacher = new Driver('Mick Schumacher', 7.3);
-const PierreGasly = new Driver('Pierre Gasly', 7.6);
-const YukiTsunoda = new Driver('Yuki Tsunoda', 7);
-const NicholasLatifi = new Driver('Nicholas Latifi', 6);
-const AlexanderAlbon = new Driver('Alexander Albon', 6.9);
-
 //Assign Drivers and Formulas to Teams
-const RedBullTeam = new Team('RedBull Racing', RedbullFormula, MaxVerstappen, SergioPerez);
-const FerrariTeam = new Team('Ferrari', FerrariFormula, CharlesLecrelc, CarlosSainz);
-const MercedesTeam = new Team('Mercedes', MercedesFormula, GeorgeRussell, LewisHamilton);
-const AlpineTeam = new Team('Alpine', AlpineFormula, FernandoAlonso, EstebanOcon);
-const McLarenTeam = new Team('McLaren', McLarenFormula, LandoNorris, DanielRicciardo);
-const AlfaRomeoTeam = new Team('Alfa Romeo', AlfaRomeoFormula, ValtteriBottas, ZhouGuanyu);
-const AstonMartinTeam = new Team('Aston Martin', AstonMartinFormula, LanceStroll, SebastianVettel);
-const HaasTeam = new Team('Haas', HaasFormula, KevinMagnussen, MickSchumacher);
-const AlphaTauriTeam = new Team('AlphaTauri', AlphaTauriFormula, PierreGasly, YukiTsunoda);
-const WilliamsTeam = new Team('Williams', WilliamsFormula, NicholasLatifi, AlexanderAlbon);
+const RedBullTeam = new Team('RedBull Racing', RedbullFormula);
+const FerrariTeam = new Team('Ferrari', FerrariFormula);
+const MercedesTeam = new Team('Mercedes', MercedesFormula);
+const AlpineTeam = new Team('Alpine', AlpineFormula);
+const McLarenTeam = new Team('McLaren', McLarenFormula);
+const AlfaRomeoTeam = new Team('Alfa Romeo', AlfaRomeoFormula);
+const AstonMartinTeam = new Team('Aston Martin', AstonMartinFormula);
+const HaasTeam = new Team('Haas', HaasFormula);
+const AlphaTauriTeam = new Team('AlphaTauri', AlphaTauriFormula);
+const WilliamsTeam = new Team('Williams', WilliamsFormula);
+
+//Driver creation, skill data from: https://www.ea.com/games/f1/f1-22/driver-ratings/ratings-database
+const SergioPerez = new Driver('Sergio Perez', 87, RedBullTeam);
+const MaxVerstappen = new Driver('Max Verstappen', 96, RedBullTeam);
+const CarlosSainz = new Driver('Carlos Sainz', 89, FerrariTeam);
+const CharlesLecrelc = new Driver('Charles Leclerc', 92, FerrariTeam);
+const GeorgeRussell = new Driver('George Russell', 91, MercedesTeam);
+const LewisHamilton = new Driver('Lewis Hamilton', 94, MercedesTeam);
+const FernandoAlonso = new Driver('Fernando Alonso', 90, AlpineTeam);
+const EstebanOcon = new Driver('Esteban Ocon', 82, AlpineTeam);
+const LandoNorris = new Driver('Lando Norris', 90, McLarenTeam);
+const DanielRicciardo = new Driver('Daniel Ricciardo', 82, McLarenTeam);
+const ValtteriBottas = new Driver('Valtteri Bottas', 83, AlfaRomeoTeam);
+const ZhouGuanyu = new Driver('Zhou Guanyu', 78, AlfaRomeoTeam);
+const LanceStroll = new Driver('Lance Stroll', 80, AstonMartinTeam);
+const SebastianVettel = new Driver('Sebastian Vettel', 85, AstonMartinTeam);
+const KevinMagnussen = new Driver('Kevin Magnussen', 80, HaasTeam);
+const MickSchumacher = new Driver('Mick Schumacher', 80, HaasTeam);
+const PierreGasly = new Driver('Pierre Gasly', 83, AlphaTauriTeam);
+const YukiTsunoda = new Driver('Yuki Tsunoda', 77, AlphaTauriTeam);
+const NicholasLatifi = new Driver('Nicholas Latifi', 67, WilliamsTeam);
+const AlexanderAlbon = new Driver('Alexander Albon', 82, WilliamsTeam);
+
+const DriversArray = [SergioPerez, MaxVerstappen, CarlosSainz, CharlesLecrelc, GeorgeRussell, LewisHamilton, FernandoAlonso, EstebanOcon, LandoNorris, DanielRicciardo, ValtteriBottas, ZhouGuanyu, LanceStroll, SebastianVettel, KevinMagnussen, MickSchumacher, PierreGasly, YukiTsunoda, NicholasLatifi, AlexanderAlbon]
 
 //Create qualifying object
-const SpaQualifying = new Qualifying(Spa, [RedBullTeam, FerrariTeam, MercedesTeam, AlpineTeam, McLarenTeam, AlfaRomeoTeam, AstonMartinTeam, HaasTeam, AlphaTauriTeam, WilliamsTeam]);
+const SpaQualifying = new Qualifying(Spa, DriversArray);
 
 //Create race object
 const SpaRace = new Race(SpaQualifying);
 
-console.log(SpaQualifying.getQualifyingPositions());
+console.log("----------------------------------------------------------")
+console.log(`! Selected circuit: ${SpaQualifying.getRaceTrack().getTrackName()}`)
+console.log(`-> Circuit lenght: ${SpaQualifying.getRaceTrack().getTrackLength()}Km`)
+console.log(`-> Circuit laps: ${SpaQualifying.getRaceTrack().getTrackLaps()}`)
+console.log(`-> Circuit corners: ${SpaQualifying.getRaceTrack().getTrackCorners()}`)
+console.log("----------------------------------------------------------")
+console.log(`! Simulating qualifying at ${SpaQualifying.getRaceTrack().getTrackName()}`)
+console.log("----------------------------------------------------------")
+console.log("Qualifying Results:");
+for(var i in SpaQualifying.getQualifyingPositions() ) {
+    console.log((parseInt(i)+1) +") "+ SpaQualifying.getQualifyingPosition(parseInt(i)).getDriverName());
+}
+console.log("----------------------------------------------------------")
+console.log(`! Starting race at ${SpaQualifying.getRaceTrack().getTrackName()}`)
+console.log("----------------------------------------------------------")
