@@ -249,6 +249,12 @@ function prettyPrintTime(time: number) {
     return prettyPrintedTime;
 }
 
+function runSession(track: RaceTrack, trackQualifying: Qualifying, race: Race) {
+    track.getRaceTrackSummary();
+    trackQualifying.getQualifyingDetails();
+    race.runRace();
+}
+
 //Racing track creation - Data Source: https://www.formula1.com/en/information.belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw.html
 //const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
 const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 1);
@@ -307,6 +313,4 @@ const TrackQualifying = new Qualifying(Spa, DriversArray);
 //Create race object
 const TrackRace = new Race(TrackQualifying);
 
-Spa.getRaceTrackSummary();
-TrackQualifying.getQualifyingDetails();
-TrackRace.runRace();
+runSession(Spa, TrackQualifying, TrackRace);
