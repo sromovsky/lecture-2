@@ -23,6 +23,30 @@ class RaceTrack {
     getTrackLaps() {
         return this.trackLaps;
     }
+    getAverageLapTime() {
+        return this.calculateAverageLapTime();
+    }
+
+    private calculateAverageLapTime() {
+        let avgStraightSpeed: number = 230;
+        let avgCornerSpeed: number = 100;
+        let trackLength: number = this.trackLength;
+        let trackCorners: number = this.trackCorners;
+        let averageLapSpeed = Math.floor(avgStraightSpeed - (avgCornerSpeed / (trackCorners / Math.PI)));
+        let averageTime: number = (trackLength / averageLapSpeed) * 60;
+        return averageTime;
+    }
+
+    getRaceTrackSummary() {
+        console.log("----------------------------------------------------------");
+        console.log(`! Selected circuit: ${this.trackName}`);
+        console.log(`-> Circuit length: ${this.trackLength}Km`);
+        console.log(`-> Circuit laps: ${this.trackLaps}`);
+        console.log(`-> Circuit corners: ${this.trackCorners}`);
+        console.log(`-> Average lap time: ${prettyPrintTime(this.getAverageLapTime())}`);
+        console.log("----------------------------------------------------------");
+    }
+
 }
 
 class Formula {
@@ -98,6 +122,7 @@ class Qualifying {
             this.qualifyingPositions.push(key);
         });
         this.shuffle(this.qualifyingPositions);
+        this.simulateQualification(drivers);
     }
 
     getRaceTrack() {
@@ -111,6 +136,29 @@ class Qualifying {
     }
     getQualifyingPosition(index: number) {
         return this.qualifyingPositions[index];
+    }
+    getQualifyingDetails() {
+        console.log(`! Simulating qualifying at ${this.raceTrack}`);
+        console.log("----------------------------------------------------------");
+        console.log("Qualifying Results:");
+        for (let i in this.getQualifyingPositions()) {
+            console.log((parseInt(i) + 1) + ") " + this.getQualifyingPosition(parseInt(i)).getDriverName());
+        }
+        console.log("----------------------------------------------------------");
+    }
+
+    private simulateQualification(array: Driver[]) {
+        //let averageLapTime: number = this.calculateAverageLapTime();
+        for (let i = 0; i < array.length; i++) {
+            let driverTimings: number[] = [];
+
+            //console.log(array[i]);
+            for (let j = 0; j < 5; j++) {
+                //console.log('Simulating');
+            }
+
+        }
+
     }
 
     //shuffle() function from:
@@ -127,7 +175,7 @@ class Qualifying {
             while (currentIndex != 0) {
                 currentIndex--;
                 //Overtaking driver can get "skill boost" helping them overtake
-                var randomChanceToOvertake: number = Math.floor(array[currentIndex].getSkillLevel() + (Math.random() * (20 - 3) + 3));
+                let randomChanceToOvertake: number = Math.floor(array[currentIndex].getSkillLevel() + (Math.random() * (20 - 3) + 3));
                 if (currentIndex === 0) {
                     break;
                 } else if (array[currentIndex - 1].getSkillLevel() < randomChanceToOvertake) {
@@ -139,6 +187,14 @@ class Qualifying {
         return array;
     }
 
+}
+
+class QualifyingDriver extends Driver {
+    private qualifyingTime: number;
+    constructor(qualifyingDriver: Driver, qualifyingTime: number) {
+        super(qualifyingDriver.getDriverName(), qualifyingDriver.getSkillLevel(), qualifyingDriver.getTeamName());
+        this.qualifyingTime = qualifyingTime;
+    }
 }
 
 class Race {
@@ -153,27 +209,29 @@ class Race {
         let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
         let lapLength: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
         let trackPositions = this.qualifyingResult.getQualifyingPositions();
+        console.log(`! Starting race at ${TrackQualifying.getRaceTrack().getTrackName()}`);
+        console.log("----------------------------------------------------------");
 
         while (currentLap < totalLaps) {
             currentLap++;
             console.log(`Start of Lap ${currentLap} out of ${totalLaps}`);
-            for (var i in trackPositions) {
+            for (let i in trackPositions) {
                 console.log((parseInt(i) + 1) + ") " + trackPositions[i].getDriverName());
             }
             console.log("----------------------------------------------------------");
             console.log(`Lap ${currentLap} details:`)
-            for (var j: number = 0; j > lapLength; j++) {
-
+            for (let j: number = 0; j < lapLength; j++) {
+                console.log('Tu raz budu detaily o aktualnom kole')
             }
             console.log("----------------------------------------------------------");
         }
         console.log("Race finished!\nResults:")
-        for (var i in trackPositions) {
+        for (let i in trackPositions) {
             console.log((parseInt(i) + 1) + ") " + trackPositions[i].getDriverName());
         }
-        console.log("----------------------------------------------------------");
+        console.log("====================RACE FINISHED=========================");
         console.log(`Race winner is ${trackPositions[0].getDriverName()}!`)
-        console.log("----------------------------------------------------------");
+        console.log("==========================================================");
     }
 
     private calculateProbabilityOfOvertake(driver1: Driver, driver2: Driver) {
@@ -181,26 +239,19 @@ class Race {
     }
 }
 
-function printIntro() {
-    console.log("----------------------------------------------------------")
-    console.log(`! Selected circuit: ${SpaQualifying.getRaceTrack().getTrackName()}`)
-    console.log(`-> Circuit length: ${SpaQualifying.getRaceTrack().getTrackLength()}Km`)
-    console.log(`-> Circuit laps: ${SpaQualifying.getRaceTrack().getTrackLaps()}`)
-    console.log(`-> Circuit corners: ${SpaQualifying.getRaceTrack().getTrackCorners()}`)
-    console.log("----------------------------------------------------------")
-    console.log(`! Simulating qualifying at ${SpaQualifying.getRaceTrack().getTrackName()}`)
-    console.log("----------------------------------------------------------")
-    console.log("Qualifying Results:");
-    for (var i in SpaQualifying.getQualifyingPositions()) {
-        console.log((parseInt(i) + 1) + ") " + SpaQualifying.getQualifyingPosition(parseInt(i)).getDriverName());
-    }
-    console.log("----------------------------------------------------------")
-    console.log(`! Starting race at ${SpaQualifying.getRaceTrack().getTrackName()}`)
-    console.log("----------------------------------------------------------")
+function prettyPrintTime(time: number) {
+    let nonDecimalMinutes: number = Math.floor(time);
+    let remainingMinutes: number = time - Math.floor(time);
+    let remainingTime: number = remainingMinutes * (60 / 1);
+    let remainingSeconds: number = Math.floor(remainingTime);
+    let remainingHundredths: number = Math.floor((remainingTime - Math.floor(remainingTime)) * 1000);
+    let prettyPrintedTime: string = `${nonDecimalMinutes}:${remainingSeconds}:${remainingHundredths}`;
+    return prettyPrintedTime;
 }
 
 //Racing track creation - Data Source: https://www.formula1.com/en/information.belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw.html
-const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
+//const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
+const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 1);
 
 //Formula creation
 const RedbullFormula = new Formula('RB18', 9, 10);
@@ -251,10 +302,11 @@ const AlexanderAlbon = new Driver('Alexander Albon', 82, WilliamsTeam);
 const DriversArray = [SergioPerez, MaxVerstappen, CarlosSainz, CharlesLecrelc, GeorgeRussell, LewisHamilton, FernandoAlonso, EstebanOcon, LandoNorris, DanielRicciardo, ValtteriBottas, ZhouGuanyu, LanceStroll, SebastianVettel, KevinMagnussen, MickSchumacher, PierreGasly, YukiTsunoda, NicholasLatifi, AlexanderAlbon]
 
 //Create qualifying object
-const SpaQualifying = new Qualifying(Spa, DriversArray);
+const TrackQualifying = new Qualifying(Spa, DriversArray);
 
 //Create race object
-const SpaRace = new Race(SpaQualifying);
+const TrackRace = new Race(TrackQualifying);
 
-printIntro();
-SpaRace.runRace();
+Spa.getRaceTrackSummary();
+TrackQualifying.getQualifyingDetails();
+TrackRace.runRace();
