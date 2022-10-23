@@ -27,7 +27,7 @@ class RaceTrack {
         return this.calculateAverageLapTime();
     }
 
-    private calculateAverageLapTime() {
+    private calculateAverageLapTime() { //calculate average time needed to complete 1 lap of selected circuit
         let avgStraightSpeed: number = 230;
         let avgCornerSpeed: number = 100;
         let trackLength: number = this.trackLength;
@@ -37,7 +37,7 @@ class RaceTrack {
         return averageTime;
     }
 
-    getRaceTrackSummary() {
+    getRaceTrackSummary() { //Get basic information about circuit
         console.log("----------------------------------------------------------");
         console.log(`! Selected circuit: ${this.trackName}`);
         console.log(`-> Circuit length: ${this.trackLength}Km`);
@@ -138,7 +138,7 @@ class Qualifying {
         return this.qualifyingPositions[index];
     }
     getQualifyingDetails() {
-        console.log(`! Simulating qualifying at ${this.raceTrack}`);
+        console.log(`! Simulating qualifying at ${this.raceTrack.getTrackName()}`);
         console.log("----------------------------------------------------------");
         console.log("Qualifying Results:");
         for (let i in this.getQualifyingPositions()) {
@@ -225,11 +225,12 @@ class Race {
             }
             console.log("----------------------------------------------------------");
         }
-        console.log("Race finished!\nResults:")
+        console.log("====================RACE FINISHED=========================");
+        console.log("Results:")
         for (let i in trackPositions) {
             console.log((parseInt(i) + 1) + ") " + trackPositions[i].getDriverName());
         }
-        console.log("====================RACE FINISHED=========================");
+        console.log("==========================================================");
         console.log(`Race winner is ${trackPositions[0].getDriverName()}!`)
         console.log("==========================================================");
     }
@@ -239,7 +240,7 @@ class Race {
     }
 }
 
-function prettyPrintTime(time: number) {
+function prettyPrintTime(time: number) { //Print time in "pretty" format: 00:00:000
     let nonDecimalMinutes: number = Math.floor(time);
     let remainingMinutes: number = time - Math.floor(time);
     let remainingTime: number = remainingMinutes * (60 / 1);
