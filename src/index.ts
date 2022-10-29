@@ -28,8 +28,8 @@ class RaceTrack {
     }
 
     private calculateAverageLapTime() { //calculate average time needed to complete 1 lap of selected circuit
-        let avgStraightSpeed: number = 230;
-        let avgCornerSpeed: number = 100;
+        let avgStraightSpeed: number = 230; //in km 
+        let avgCornerSpeed: number = 100; //in km
         let trackLength: number = this.trackLength;
         let trackCorners: number = this.trackCorners;
         let averageLapSpeed = Math.floor(avgStraightSpeed - (avgCornerSpeed / (trackCorners / Math.PI)));
@@ -43,7 +43,7 @@ class RaceTrack {
         console.log(`-> Circuit length: ${this.trackLength}Km`);
         console.log(`-> Circuit laps: ${this.trackLaps}`);
         console.log(`-> Circuit corners: ${this.trackCorners}`);
-        console.log(`-> Average lap time: ${prettyPrintTime(this.getAverageLapTime())}`);
+        console.log(`-> Average lap time: ${prettyPrintTime(this.getAverageLapTime())} \(${this.getAverageLapTime()}\)`);
         console.log("----------------------------------------------------------");
     }
 
@@ -148,13 +148,13 @@ class Qualifying {
     }
 
     private simulateQualification(array: Driver[]) {
-        //let averageLapTime: number = this.calculateAverageLapTime();
+        let qualiPositions: Driver[];
+        let averageLapTime: number = Spa.getAverageLapTime();
         for (let i = 0; i < array.length; i++) {
             let driverTimings: number[] = [];
-
-            //console.log(array[i]);
+            let skillLevel: number = array[i].getSkillLevel();
             for (let j = 0; j < 5; j++) {
-                //console.log('Simulating');
+
             }
 
         }
@@ -189,13 +189,13 @@ class Qualifying {
 
 }
 
-class QualifyingDriver extends Driver {
+/* class QualifyingDriver extends Driver {
     private qualifyingTime: number;
     constructor(qualifyingDriver: Driver, qualifyingTime: number) {
         super(qualifyingDriver.getDriverName(), qualifyingDriver.getSkillLevel(), qualifyingDriver.getTeamName());
         this.qualifyingTime = qualifyingTime;
     }
-}
+} */
 
 class Race {
     private qualifyingResult: Qualifying;
