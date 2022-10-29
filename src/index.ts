@@ -11,19 +11,19 @@ class RaceTrack {
         this.trackLaps = trackLaps;
     }
 
-    getTrackName() {
+    getTrackName(): string {
         return this.trackName;
     }
-    getTrackLength() {
+    getTrackLength(): number {
         return this.trackLength;
     }
-    getTrackCorners() {
+    getTrackCorners(): number {
         return this.trackCorners;
     }
-    getTrackLaps() {
+    getTrackLaps(): number {
         return this.trackLaps;
     }
-    getAverageLapTime() {
+    getAverageLapTime(): number {
         return this.calculateAverageLapTime();
     }
 
@@ -60,13 +60,13 @@ class Formula {
         this.breaking = breaking;
     }
 
-    getFormulaName() {
+    getFormulaName(): string {
         return this.formulaName;
     }
-    getSpeed() {
+    getSpeed(): number {
         return this.speed;
     }
-    getBreaking() {
+    getBreaking(): number {
         return this.breaking;
     }
 }
@@ -82,13 +82,13 @@ class Driver {
         this.team = team;
     }
 
-    getDriverName() {
+    getDriverName(): string {
         return this.driverName;
     }
-    getSkillLevel() {
+    getSkillLevel(): number {
         return this.skillLevel;
     }
-    getTeamName() {
+    getTeamName(): Team {
         return this.team;
     }
 }
@@ -101,10 +101,10 @@ class Team {
         this.formula = formula;
 
     }
-    getTeamName() {
+    getTeamName(): string {
         return this.teamName;
     }
-    getFormula() {
+    getFormula(): Formula {
         return this.formula;
     }
 }
@@ -117,27 +117,24 @@ class Qualifying {
     constructor(raceTrack: RaceTrack, drivers: Driver[]) {
         this.raceTrack = raceTrack;
         this.drivers = drivers;
-        this.qualifyingPositions = [];
-        [...this.drivers].forEach((key, index) => {
-            this.qualifyingPositions.push(key);
-        });
-        this.shuffle(this.qualifyingPositions);
-        this.simulateQualification(drivers);
+        let calculatedQualifyingPositions: Driver[] = this.simulateQualification(drivers);
+        this.qualifyingPositions = calculatedQualifyingPositions;
+        
     }
 
-    getRaceTrack() {
+    getRaceTrack(): RaceTrack {
         return this.raceTrack;
     }
-    getDrivers() {
+    getDrivers(): Driver[] {
         return this.drivers;
     }
-    getQualifyingPositions() {
+    getQualifyingPositions(): Driver[] {
         return this.qualifyingPositions;
     }
-    getQualifyingPosition(index: number) {
+    getQualifyingPosition(index: number): Driver {
         return this.qualifyingPositions[index];
     }
-    getQualifyingDetails() {
+    getQualifyingDetails(): void {
         console.log(`! Simulating qualifying at ${this.raceTrack.getTrackName()}`);
         console.log("----------------------------------------------------------");
         console.log("Qualifying Results:");
@@ -147,55 +144,39 @@ class Qualifying {
         console.log("----------------------------------------------------------");
     }
 
-    private simulateQualification(array: Driver[]) {
-        let qualiPositions: Driver[];
+    private simulateQualification(array: Driver[]): Driver[] {
+        let qualiPositions: QualifyingDriver[] = [];
         let averageLapTime: number = Spa.getAverageLapTime();
         for (let i = 0; i < array.length; i++) {
             let driverTimings: number[] = [];
             let skillLevel: number = array[i].getSkillLevel();
+            let minVariation: number = -0.33;
+            let maxVariation: number = 0.33;
             for (let j = 0; j < 5; j++) {
-
+                let qualifyingTime: number = 0;
+                qualifyingTime = (averageLapTime * (skillLevel/100)) + Math.random() * (maxVariation - minVariation) + minVariation;
+                driverTimings.push(qualifyingTime);
             }
-
+            driverTimings.sort();
+            qualiPositions.push(new QualifyingDriver(array[i], driverTimings[0]));
         }
-
-    }
-
-    //shuffle() function from:
-    //https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-    //Using drivers skill level determine semi-randomly starting position of drivers
-    private shuffle(array: Driver[]) {
-
-        //Order drivers by their skill level
-        array.sort((a, b) => b.getSkillLevel() - a.getSkillLevel());
-
-        //Simulate starting positions of drivers
-        for (let i = 0; i < 20; i++) {
-            let currentIndex = array.length - 1;
-            while (currentIndex != 0) {
-                currentIndex--;
-                //Overtaking driver can get "skill boost" helping them overtake
-                let randomChanceToOvertake: number = Math.floor(array[currentIndex].getSkillLevel() + (Math.random() * (20 - 3) + 3));
-                if (currentIndex === 0) {
-                    break;
-                } else if (array[currentIndex - 1].getSkillLevel() < randomChanceToOvertake) {
-                    [array[currentIndex], array[currentIndex - 1]] = [array[currentIndex - 1], array[currentIndex]];
-                }
-            }
-        }
-
-        return array;
-    }
-
+        qualiPositions.sort((a, b) => b.getQualifyingDriverTime() - a.getQualifyingDriverTime());
+        return qualiPositions;
+    } 
 }
 
-/* class QualifyingDriver extends Driver {
+
+class QualifyingDriver extends Driver {
     private qualifyingTime: number;
     constructor(qualifyingDriver: Driver, qualifyingTime: number) {
         super(qualifyingDriver.getDriverName(), qualifyingDriver.getSkillLevel(), qualifyingDriver.getTeamName());
         this.qualifyingTime = qualifyingTime;
     }
-} */
+
+    getQualifyingDriverTime(): number {
+        return this.qualifyingTime;
+    }
+}
 
 class Race {
     private qualifyingResult: Qualifying;
@@ -204,7 +185,7 @@ class Race {
         this.qualifyingResult = qualifyingResult;
     }
 
-    runRace() {
+    runRace(): void {
         let currentLap: number = 0;
         let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
         let lapLength: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
@@ -240,7 +221,7 @@ class Race {
     }
 }
 
-function prettyPrintTime(time: number) { //Print time in "pretty" format: 00:00:000
+function prettyPrintTime(time: number): string { //Print time in "pretty" format: 00:00:000
     let nonDecimalMinutes: number = Math.floor(time);
     let remainingMinutes: number = time - Math.floor(time);
     let remainingTime: number = remainingMinutes * (60 / 1);
@@ -250,7 +231,7 @@ function prettyPrintTime(time: number) { //Print time in "pretty" format: 00:00:
     return prettyPrintedTime;
 }
 
-function runSession(track: RaceTrack, trackQualifying: Qualifying, race: Race) {
+function runSession(track: RaceTrack, trackQualifying: Qualifying, race: Race): void {
     track.getRaceTrackSummary();
     trackQualifying.getQualifyingDetails();
     race.runRace();
