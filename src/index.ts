@@ -28,8 +28,8 @@ class RaceTrack {
     }
 
     private calculateAverageLapTime() { //calculate average time needed to complete 1 lap of selected circuit
-        let avgStraightSpeed: number = 230; //in km 
-        let avgCornerSpeed: number = 100; //in km
+        let avgStraightSpeed: number = 230; //in km/h 
+        let avgCornerSpeed: number = 100; //in km/h
         let trackLength: number = this.trackLength;
         let trackCorners: number = this.trackCorners;
         let averageLapSpeed = Math.floor(avgStraightSpeed - (avgCornerSpeed / (trackCorners / Math.PI)));
@@ -43,7 +43,7 @@ class RaceTrack {
         console.log(`-> Circuit length: ${this.trackLength}Km`);
         console.log(`-> Circuit laps: ${this.trackLaps}`);
         console.log(`-> Circuit corners: ${this.trackCorners}`);
-        console.log(`-> Average lap time: ${prettyPrintTime(this.getAverageLapTime())} \(${this.getAverageLapTime()}\)`);
+        console.log(`-> Average lap time: ${prettyPrintTime(this.getAverageLapTime())}`);
         console.log("----------------------------------------------------------");
     }
 
@@ -112,12 +112,12 @@ class Team {
 class Qualifying {
     private raceTrack: RaceTrack;
     private drivers: Driver[];
-    private qualifyingPositions: Driver[];
+    private qualifyingPositions: QualifyingDriver[];
 
     constructor(raceTrack: RaceTrack, drivers: Driver[]) {
         this.raceTrack = raceTrack;
         this.drivers = drivers;
-        let calculatedQualifyingPositions: Driver[] = this.simulateQualification(drivers);
+        let calculatedQualifyingPositions: QualifyingDriver[] = this.simulateQualification(drivers);
         this.qualifyingPositions = calculatedQualifyingPositions;
         
     }
@@ -139,33 +139,39 @@ class Qualifying {
         console.log("----------------------------------------------------------");
         console.log("Qualifying Results:");
         for (let i in this.getQualifyingPositions()) {
-            console.log((parseInt(i) + 1) + ") " + this.getQualifyingPosition(parseInt(i)).getDriverName());
+            console.log(`${parseInt(i) + 1}) ${this.getQualifyingPosition(parseInt(i)).getDriverName()} (${prettyPrintTime(this.qualifyingPositions[i].getQualifyingDriverTime())})`);
         }
         console.log("----------------------------------------------------------");
     }
 
-    private simulateQualification(array: Driver[]): Driver[] {
+    /*
+    Simulate qualifying of all drivers. All drivers take 5 laps where they try to set fastest time.
+    qualifyingTime is calculated based on skill level and formula stats with random variation of results
+    */
+    private simulateQualification(array: Driver[]): QualifyingDriver[] {
         let qualiPositions: QualifyingDriver[] = [];
         let averageLapTime: number = Spa.getAverageLapTime();
         for (let i = 0; i < array.length; i++) {
             let driverTimings: number[] = [];
             let skillLevel: number = array[i].getSkillLevel();
-            let minVariation: number = -0.33;
-            let maxVariation: number = 0.33;
+            let formulaSpeed: number = array[i].getTeamName().getFormula().getSpeed();
+            let formulaBreaking: number = array[i].getTeamName().getFormula().getBreaking();
+            let minVariation: number = 0;
+            let maxVariation: number = 0.2;
             for (let j = 0; j < 5; j++) {
                 let qualifyingTime: number = 0;
-                qualifyingTime = (averageLapTime * (skillLevel/100)) + Math.random() * (maxVariation - minVariation) + minVariation;
+                qualifyingTime = (averageLapTime - (skillLevel/1000) - (formulaSpeed/100) - (formulaBreaking/100)) + (Math.random() * (maxVariation - minVariation) + minVariation) + maxVariation;
                 driverTimings.push(qualifyingTime);
             }
             driverTimings.sort();
             qualiPositions.push(new QualifyingDriver(array[i], driverTimings[0]));
         }
-        qualiPositions.sort((a, b) => b.getQualifyingDriverTime() - a.getQualifyingDriverTime());
+        qualiPositions.sort((a, b) => a.getQualifyingDriverTime() - b.getQualifyingDriverTime()); //sort drivers from quickest to slowest qualifying time
         return qualiPositions;
     } 
 }
 
-
+//Needed separate class, which contains best result of driver from qualifying
 class QualifyingDriver extends Driver {
     private qualifyingTime: number;
     constructor(qualifyingDriver: Driver, qualifyingTime: number) {
@@ -226,8 +232,14 @@ function prettyPrintTime(time: number): string { //Print time in "pretty" format
     let remainingMinutes: number = time - Math.floor(time);
     let remainingTime: number = remainingMinutes * (60 / 1);
     let remainingSeconds: number = Math.floor(remainingTime);
+    let remainingSecondsWithZero: string = "";
+    if (remainingSeconds < 10) {
+        remainingSecondsWithZero = "0"+remainingSeconds.toString();
+    } else {
+        remainingSecondsWithZero = remainingSeconds.toString();
+    }
     let remainingHundredths: number = Math.floor((remainingTime - Math.floor(remainingTime)) * 1000);
-    let prettyPrintedTime: string = `${nonDecimalMinutes}:${remainingSeconds}:${remainingHundredths}`;
+    let prettyPrintedTime: string = `${nonDecimalMinutes}:${remainingSecondsWithZero}:${remainingHundredths}`;
     return prettyPrintedTime;
 }
 
