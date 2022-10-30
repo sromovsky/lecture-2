@@ -21,23 +21,23 @@ constructor (PlayerName: String, PlayerNationality: String, PlayerRanking: Numbe
 this.PlayerName= PlayerName;
 this.PlayerNationality= PlayerNationality;
 this.PlayerRanking= PlayerRanking;
-this.PlayerRankingPoints= PlayerRankingPoints;}}
+this.PlayerRankingPoints= PlayerRankingPoints;}
 
-getPlayerName(): string {
+getPlayerName(): String {
 return this.PlayerName;
 }
-getPlayerNationality(): string {
+getPlayerNationality(): String {
 return this.PlayerNationality;
 }
 
-getPlayerRanking(): number {
+getPlayerRanking(): Number {
 return this.PlayerRanking;
 }
 
-getPlayerRankingPoints(): number {
+getPlayerRankingPoints(): Number {
 return this.PlayerRankingPoints;
 }
-
+}
 
 const CarlosAlcaraz= new Player('Carlos Alcaraz', 'Spain', 1, 6730);
 const RafaelNadal= new Player('Rafael Nadal', 'Spain', 2, 5810);
@@ -49,3 +49,13 @@ const NovakDjokovic= new Player('Novak Djokovic', 'Serbia', 7, 4320);
 const AndreyRublev= new Player('Andrey Rublev', 'Russia', 8, 3685)
 const TaylorFritz= new Player('Taylor Fritz', 'USA', 9, 3195)
 
+class Winner{private Pla: Player; private Score: String; private Win:String;
+
+constructor(Pla: Player, Score: String){
+this.Pla= Pla;
+this.Score= Score;
+let Winner: this.getRandomPlayer();
+this.Win= Winner;
+
+}
+}
