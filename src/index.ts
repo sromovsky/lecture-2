@@ -1,138 +1,89 @@
-class Person {
-    private name: string;
-    protected age?: number;
+/*
+Informácie o futbalovom zápase
+Priebeh zápasu
+Výsledok zápasu*/
 
-    protected constructor(name: string, age?: number) {
-        this.name = name;
-        this.age = age;
+
+class futbalovyzapas {
+    private krajina: string;
+    private liga: string;
+    private team1: string;
+    private team2: string;
+    private stadion: string;
+
+
+
+
+    constructor(krajina: string, liga: string, team1: string, team2: string, stadion : string) {
+        this.krajina = krajina;
+        this.liga = liga;
+        this.team1 = team1;
+        this.team2 = team2;
+        this.stadion = stadion;
     }
 
-    getAge(): number | undefined {
-        return this.age;
+    getkrajina(): string {
+        return this.krajina;
     }
 
-    getName(): string {
-        return this.name;
+
+    getliga(): string {
+        return this.liga;
     }
 
-    private ageIncrement() {
-        if (this.age) {
-            this.age++;
-        }
+
+    getstadion(): string {
+        return this.stadion;
     }
 
-    birthday() {
-        this.ageIncrement();
-    }
-}
-class Student extends Person {
-    private id: string;
-
-    constructor(name: string, id: string, age?: number) {
-        super(name, age);
-        this.id = id;
+    getteam1(): string {
+        return this.team1;
     }
 
-    getId(): string {
-        this.age
-        return this.id;
-    }
-}
-class Teacher extends Person {
-
-    constructor(name: string, age?: number) {
-        super(name, age);
-    }
-}
-
-class Address {
-    private city: string;
-    private street: string;
-    private number: number;
-
-    constructor(city: string, street: string, number: number) {
-        this.number = number;
-        this.city = city;
-        this.street = street;
+    getteam2(): string {
+        return this.team2;
     }
 
-    getCity(): string {
-        return this.city;
-    }
 
-    getStreet(): string {
-        return this.street;
-    }
-
-    getNumber(): number {
-        return this.number;
-    }
 }
 
-class Building {
-    private name: string;
-    private address: Address;
-    private floors: Floor[];
+//function zapas(){ // nepouzil som
 
-    constructor(name: string, address: Address, floorsCount: number) {
-        this.name = name;
-        this.address = address;
+//}
 
-        this.floors = [];
-        for (let i = 0; i <= floorsCount; i++) {
-            this.floors.push(new Floor(i));
-        }
-    }
 
-    getName(): string {
-        return this.name;
-    }
+const futbalovyzapas1 = new futbalovyzapas('slovensko', 'Fortuna ligy','Slovan Bratislava','Spartak Trnava', 'Tehelnom poli' );
 
-    getAddress(): string {
-        return `${this.address.getStreet()} ${this.address.getNumber()}, ${this.address.getCity()}`;
-    }
+//console.log(" Druzstvo Domaci : " + futbalovyzapas1.getkrajina());
+console.log('Začína sa zápas '+ futbalovyzapas1.getliga());
+console.log('Zápas sa hrá na ' + futbalovyzapas1.getstadion());
+console.log('                                                ');
+console.log('Na ihrisko prichádzajú hráči ' + futbalovyzapas1.getteam1() );
+console.log('                                                ');
+console.log('Na ihrisko prichádzajú hráči ' + futbalovyzapas1.getteam2());
+console.log('                                              ');
 
-    getFloor(id: number): Floor | undefined {
-        return this.floors[id];
-    }
 
-    getRoom(roomId: string): Room | undefined {
-        const floorId = Number(roomId.slice(0, roomId.indexOf('.')));
-        const floor = this.getFloor(floorId);
-        return floor?.getRoom(roomId);
-    }
+
+//random funkcia https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+//https://bobbyhadz.com/blog/typescript-parameter-implicitly-has-an-any-type
+
+function skoreteam(x: any) {
+    return Math.floor(Math.random() * x);
 }
 
-class Room {
-    id: string;
 
+const random1 = skoreteam(4);
+const random2 = skoreteam(4);
+const final = skoreteam(2) + random1;
 
-    constructor(id: string) {
-        this.id = id;
-    }
-}
+console.log('Skóre po prvom polčase')
+console.log('Slovan ' + random1 + ':' + random2 + ' Trnava');
+console.log('                           ');
+console.log('Zápas pokračuje');
+console.log('Striedanie hráča č. 7 Spartak Trnava');
+console.log('Striedanie hráča č. 30 Slovan Bratislava');
+console.log('                           ');
+console.log('                           ');
+console.log('Výsledok Zápasu: ' + 'Slovan ' + final + ':' + random2 + ' Trnava');
 
-class Floor {
-    id: number;
-    rooms: Room[];
-
-    constructor(id: number) {
-        this.id = id;
-
-        this.rooms = []
-        for (let i = 0; i <= 10; i++) {
-            this.rooms.push(new Room(`${this.id}.${i}`));
-        }
-    }
-
-    getRoom(id: string): Room | undefined {
-        return this.rooms.find(r => r.id === id);
-    }
-}
-
-const address1 = new Address('Bratislava', 'Bajkalská', 28);
-const building1 = new Building('FBC', address1, 16);
-
-console.log(building1.getRoom('3.1'));
-
-building1.getRoom('3.1');
