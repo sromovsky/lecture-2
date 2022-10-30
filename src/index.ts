@@ -27,7 +27,7 @@ class RaceTrack {
         return this.calculateAverageLapTime();
     }
 
-    private calculateAverageLapTime() { //calculate average time needed to complete 1 lap of selected circuit
+    private calculateAverageLapTime(): number { //calculate average time needed to complete 1 lap of selected circuit
         let avgStraightSpeed: number = 230; //in km/h 
         let avgCornerSpeed: number = 100; //in km/h
         let trackLength: number = this.trackLength;
@@ -37,7 +37,7 @@ class RaceTrack {
         return averageTime;
     }
 
-    getRaceTrackSummary() { //Get basic information about circuit
+    getRaceTrackSummary(): void { //Get basic information about circuit
         console.log("----------------------------------------------------------");
         console.log(`! Selected circuit: ${this.trackName}`);
         console.log(`-> Circuit length: ${this.trackLength}Km`);
@@ -171,7 +171,7 @@ class Qualifying {
     } 
 }
 
-//Needed separate class, which contains best result of driver from qualifying
+//Needed separate class, which contains best result of driver from qualifying for sorting purposes
 class QualifyingDriver extends Driver {
     private qualifyingTime: number;
     constructor(qualifyingDriver: Driver, qualifyingTime: number) {
@@ -191,6 +191,7 @@ class Race {
         this.qualifyingResult = qualifyingResult;
     }
 
+    //Main part of simulation, starts race and simulates progress throughout the laps
     runRace(): void {
         let currentLap: number = 0;
         let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
@@ -213,9 +214,11 @@ class Race {
                 //Check if overtake was successful
                 let isOvertakeSuccessfull: boolean = this.checkOvertakePossibility(trackPositions[randomDriver], trackPositions[randomDriver-1])
                 if (isOvertakeSuccessfull) {
+                    //If true, swich positions in drivers array and output information to console
                     [trackPositions[randomDriver], trackPositions[randomDriver-1]] = [trackPositions[randomDriver-1], trackPositions[randomDriver]];
                     console.log(`[✓] ${trackPositions[randomDriver-1].getDriverName()} overtook ${trackPositions[randomDriver].getDriverName()}`);
                 } else {
+                    //If false, do not switch positions and output information about overtake try to console
                     console.log(`[X] ${trackPositions[randomDriver-1].getDriverName()} failed to overtake ${trackPositions[randomDriver].getDriverName()}`);
                 }
             }
@@ -234,7 +237,7 @@ class Race {
     /*
     Function to check if driver1 overtook driver2 based on their skill, formula level and random chance.
     */
-    private checkOvertakePossibility(driver1: Driver, driver2: Driver): boolean  {
+    private checkOvertakePossibility(driver1: Driver, driver2: Driver): boolean {
         let driver1randomChance: number = Math.random();
         let driver2randomChance: number = Math.random();
         let driver1skill: number = driver1.getSkillLevel();
@@ -255,6 +258,7 @@ function prettyPrintTime(time: number): string { //Print time in "pretty" format
     let remainingTime: number = remainingMinutes * (60 / 1);
     let remainingSeconds: number = Math.floor(remainingTime);
     let remainingSecondsWithZero: string = "";
+    //Fix so time doesn't show up in weird format like 2:1:123 but instead shows up as 2:01:123
     if (remainingSeconds < 10) {
         remainingSecondsWithZero = "0"+remainingSeconds.toString();
     } else {
