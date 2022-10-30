@@ -195,7 +195,7 @@ class Race {
         let currentLap: number = 0;
         let totalLaps: number = this.qualifyingResult.getRaceTrack().getTrackLaps();
         let lapLength: number = Math.round(this.qualifyingResult.getRaceTrack().getTrackLength());
-        let trackPositions = this.qualifyingResult.getQualifyingPositions();
+        let trackPositions: Driver[] = this.qualifyingResult.getQualifyingPositions();
         console.log(`! Starting race at ${TrackQualifying.getRaceTrack().getTrackName()}`);
         console.log("----------------------------------------------------------");
 
@@ -207,8 +207,17 @@ class Race {
             }
             console.log("----------------------------------------------------------");
             console.log(`Lap ${currentLap} details:`)
-            for (let j: number = 0; j < lapLength; j++) {
-                console.log('Tu raz budu detaily o aktualnom kole')
+            for (let j: number = 0; j < Math.random() * (lapLength*2 - lapLength/2) + lapLength/2; j++) {
+                //Select random driver
+                let randomDriver: number = Math.floor(Math.random() * (trackPositions.length - 1) + 1)
+                //Check if overtake was successful
+                let isOvertakeSuccessfull: boolean = this.checkOvertakePossibility(trackPositions[randomDriver], trackPositions[randomDriver-1])
+                if (isOvertakeSuccessfull) {
+                    [trackPositions[randomDriver], trackPositions[randomDriver-1]] = [trackPositions[randomDriver-1], trackPositions[randomDriver]];
+                    console.log(`[✓] ${trackPositions[randomDriver-1].getDriverName()} overtook ${trackPositions[randomDriver].getDriverName()}`);
+                } else {
+                    console.log(`[X] ${trackPositions[randomDriver-1].getDriverName()} failed to overtake ${trackPositions[randomDriver].getDriverName()}`);
+                }
             }
             console.log("----------------------------------------------------------");
         }
@@ -222,8 +231,21 @@ class Race {
         console.log("==========================================================");
     }
 
-    private calculateProbabilityOfOvertake(driver1: Driver, driver2: Driver) {
-
+    /*
+    Function to check if driver1 overtook driver2 based on their skill, formula level and random chance.
+    */
+    private checkOvertakePossibility(driver1: Driver, driver2: Driver): boolean  {
+        let driver1randomChance: number = Math.random();
+        let driver2randomChance: number = Math.random();
+        let driver1skill: number = driver1.getSkillLevel();
+        let driver2skill: number = driver2.getSkillLevel();
+        let driver1formulaLevel: number = (driver1.getTeamName().getFormula().getSpeed() + driver1.getTeamName().getFormula().getBreaking())/2
+        let driver2formulaLevel: number = (driver2.getTeamName().getFormula().getSpeed() + driver2.getTeamName().getFormula().getBreaking())/2
+        let driver1totalLevel: number = (((driver1skill * 0.25) + (driver1formulaLevel * 1.25)) / 100) + driver1randomChance;
+        let driver2totalLevel: number = (((driver2skill * 0.25) + (driver2formulaLevel * 1.25)) / 100) + driver2randomChance;  
+        if (driver1totalLevel > driver2totalLevel) {
+            return true;
+        } else return false;
     }
 }
 
@@ -250,8 +272,7 @@ function runSession(track: RaceTrack, trackQualifying: Qualifying, race: Race): 
 }
 
 //Racing track creation - Data Source: https://www.formula1.com/en/information.belgium-circuit-de-spa-francorchamps.3LltuYaAXVRU8iezEsjzGw.html
-//const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
-const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 1);
+const Spa = new RaceTrack('Spa-Francorchamps Circuit', 7.004, 19, 44);
 
 //Formula creation
 const RedbullFormula = new Formula('RB18', 9, 10);
