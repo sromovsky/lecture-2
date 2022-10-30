@@ -38,7 +38,7 @@ getPlayerRankingPoints(): Number {
 return this.PlayerRankingPoints;
 }
 }
-
+// vytvorenie hráčov, dáta z https://www.espn.com/tennis/rankings
 const CarlosAlcaraz= new Player('Carlos Alcaraz', 'Spain', 1, 6730);
 const RafaelNadal= new Player('Rafael Nadal', 'Spain', 2, 5810);
 const CasperRuud= new Player('Casper Ruud', 'Norway', 3, 5600);
