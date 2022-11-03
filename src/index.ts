@@ -268,11 +268,6 @@ console.log("\nKoniec zápasu!!!\n");
 Team1.Wins++;
 Team2.Losses++;
 
-console.log("\nThe match is over!", Team1.getName(), "win over", Team2.getName(), "with a score of", Score.getScore1(), "to", Score.getScore2(), "!\n");
-console.log("\nThe scoring players of the match were:\n");
-console.log(Player1.getName(), "with", Player1.getGoals(), "goals,");
-console.log(Player4.getName(), "with", Player4.getGoals(), "goals,");
-console.log(Player7.getName(), "with", Player7.getGoals(), "goals,");
-console.log("and", Player8.getName(), "with", Player8.getGoals(), "goals.\n");
+
 
 console.log(Team1.getName(), "vyhral zápas proti ", Team2.getName(), "s tesným výsledkom ", Score.getNO1(), ":", Score.getNO2() );
