@@ -264,10 +264,8 @@ console.log("Aktuálne skóre je", Score.getNO1(), ":", Score.getNO2(), ".\n");
 
 console.log("\nKoniec zápasu!!!\n");
 
-// Pripísanie výhry a prehry pre jednotlivé tímy, rekapitulácia
+// rekapitulácia
 Team1.Wins++;
 Team2.Losses++;
 
-
-
-console.log(Team1.getName(), "vyhral zápas proti ", Team2.getName(), "s tesným výsledkom ", Score.getNO1(), ":", Score.getNO2() );
+console.log(Team1.getName(), "vyhrala zápas proti ", Team2.getName(), "s tesným výsledkom ", Score.getNO1(), ":", Score.getNO2() );
