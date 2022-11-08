@@ -17,6 +17,8 @@ class RaceTrack {
     getTrackLength(): number {
         return this.trackLength;
     }
+
+    // getTrackCorners() sa nepouziva nikde tak v takom pripade nemusime vytvarat geter. aj pri dalsich triedach, ale neni to nejaky kriticky problem :)
     getTrackCorners(): number {
         return this.trackCorners;
     }
@@ -28,13 +30,15 @@ class RaceTrack {
     }
 
     private calculateAverageLapTime(): number { //calculate average time needed to complete 1 lap of selected circuit
-        let avgStraightSpeed: number = 230; //in km/h 
-        let avgCornerSpeed: number = 100; //in km/h
-        let trackLength: number = this.trackLength;
-        let trackCorners: number = this.trackCorners;
-        let averageLapSpeed = Math.floor(avgStraightSpeed - (avgCornerSpeed / (trackCorners / Math.PI)));
-        let averageTime: number = (trackLength / averageLapSpeed) * 60;
-        return averageTime;
+
+        // je lepsie dat vsade tam kde nemodifikujes premennu const namiesto let:
+        const avgStraightSpeed: number = 230; //in km/h
+        const avgCornerSpeed: number = 100; //in km/h
+        const trackLength: number = this.trackLength;
+        const trackCorners: number = this.trackCorners;
+        const averageLapSpeed = Math.floor(avgStraightSpeed - (avgCornerSpeed / (trackCorners / Math.PI)));
+        // hodnotu mozes rovno takto vratit, je to krajsi zapis a kedze si predosle operacie ulozil do premennej tak je to aj jednoduche na citanie:
+        return (trackLength / averageLapSpeed) * 60;
     }
 
     getRaceTrackSummary(): void { //Get basic information about circuit
@@ -150,14 +154,17 @@ class Qualifying {
     */
     private simulateQualification(array: Driver[]): QualifyingDriver[] {
         let qualiPositions: QualifyingDriver[] = [];
+
+        // Spa.getAverageLapTime() toto nie je OK riesenie. pre tento pripad by som to vytiahol do construktora pre Qualifying ako vstup a rovnako ako vstup pre tuto metodu simulateQualification.
         let averageLapTime: number = Spa.getAverageLapTime();
         for (let i = 0; i < array.length; i++) {
-            let driverTimings: number[] = [];
-            let skillLevel: number = array[i].getSkillLevel();
-            let formulaSpeed: number = array[i].getTeamName().getFormula().getSpeed();
-            let formulaBreaking: number = array[i].getTeamName().getFormula().getBreaking();
-            let minVariation: number = 0;
-            let maxVariation: number = 0.2;
+            // tiez mozeme const pouzit
+            const driverTimings: number[] = [];
+            const skillLevel: number = array[i].getSkillLevel();
+            const formulaSpeed: number = array[i].getTeamName().getFormula().getSpeed();
+            const formulaBreaking: number = array[i].getTeamName().getFormula().getBreaking();
+            const minVariation: number = 0;
+            const maxVariation: number = 0.2;
             for (let j = 0; j < 5; j++) {
                 let qualifyingTime: number = 0;
                 qualifyingTime = (averageLapTime - (skillLevel/1000) - (formulaSpeed/100) - (formulaBreaking/100)) + (Math.random() * (maxVariation - minVariation) + minVariation) + maxVariation;
@@ -245,10 +252,13 @@ class Race {
         let driver1formulaLevel: number = (driver1.getTeamName().getFormula().getSpeed() + driver1.getTeamName().getFormula().getBreaking())/2
         let driver2formulaLevel: number = (driver2.getTeamName().getFormula().getSpeed() + driver2.getTeamName().getFormula().getBreaking())/2
         let driver1totalLevel: number = (((driver1skill * 0.25) + (driver1formulaLevel * 1.25)) / 100) + driver1randomChance;
-        let driver2totalLevel: number = (((driver2skill * 0.25) + (driver2formulaLevel * 1.25)) / 100) + driver2randomChance;  
-        if (driver1totalLevel > driver2totalLevel) {
-            return true;
-        } else return false;
+        let driver2totalLevel: number = (((driver2skill * 0.25) + (driver2formulaLevel * 1.25)) / 100) + driver2randomChance;
+
+        // toto je zbytocny zapis staci takto:
+        // if (driver1totalLevel > driver2totalLevel) {
+        //     return true;
+        // } else return false;
+        return driver1totalLevel > driver2totalLevel;
     }
 }
 
@@ -333,3 +343,15 @@ const TrackQualifying = new Qualifying(Spa, DriversArray);
 const TrackRace = new Race(TrackQualifying);
 
 runSession(Spa, TrackQualifying, TrackRace);
+
+// Zadanie velmi dobre, nejak tak som si to predstavoval, nejake drobnosti som vytiahol, ta logika a vypocty, to som velmi nepozeral, nie je to ani tak predmetom toho zadania,
+// Pri poznani vsetkych funkcii TS by sa to dalo implementovat jednoduchsie, ale inac je to velmi pekne vypracovane zadanie :)
+// ta metoda na formatovanie casu je ok ale tu run session by som asi schoval do objektu RaceTrack. a nejak to oddelil. rovnako aj Qualifying by mohla vraciat metoda
+// const trackQualifying = Spa.trackQualifying(DriversArray);
+
+// a samotna session by sa dala pustit takto.
+// Spa.runSession(trackQualifying);
+// TrackRace by sa mozno mohol vytvorit az v tej metode.
+
+// neviem ci toto je uplne teraz naucene :) alebo uz mas toho ovela viac odprogramovane ako ostatni :)
+// kazdopadne pekna praca este raz
