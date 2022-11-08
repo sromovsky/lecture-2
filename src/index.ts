@@ -3,7 +3,9 @@ class Person {
     private Name: string;
     private Surname: string;
 
-    constructor(Name: string, Age: number)
+    // Age???
+    // constructor(Name: string, Age: number)
+    constructor(Name: string, Surname: string)
     {
         this.Name = Name;
         this.Surname = Surname;
@@ -33,9 +35,9 @@ class Player extends Person {
         super(Name, Surname);
         this.Team = Team;
         this.NumberOnDress = NumberOnDress;
-        this.Position = string;
-        this.Goals = number;
-        this.Assistance = number;
+        this.Position = Position;
+        this.Goals = Goals;
+        this.Assistance = Assistance;
 
     }
 
@@ -51,17 +53,17 @@ class Player extends Person {
 
     getPosition(): string
     {
-             return this.Position;
+        return this.Position;
     }
 
-    getGoals(): string
+    getGoals(): number
     {
-             return this.Goals;
+        return this.Goals;
     }
 
-    getAssistance(): string
+    getAssistance(): number
     {
-             return this.Assistance;
+        return this.Assistance;
     }
 }
 
@@ -88,10 +90,10 @@ class Team
         return this.Name;
     }
 
-    getMatches(): string
-        {
-            return this.Matches;
-        }
+    getMatches(): number
+    {
+        return this.Matches;
+    }
 
     getWins(): number
     {
@@ -104,9 +106,9 @@ class Team
     }
 
     getTies(): number
-        {
-            return this.Ties;
-        }
+    {
+        return this.Ties;
+    }
 }
 
 // Vytvorenie triedy Result kde vidíme skóre
@@ -206,6 +208,7 @@ Player28.Goals++;
 
 console.log("\nV 5. minúte a 44. sekunde hráč číslo", Player28.getNumberOnDress(), "strieľa prvý gól za tým", Player28.getTeam(),"!");
 console.log("Aktuálne skóre je: ", Score.getScore1(), ":", Score.getScore2(), ".\n");
+// getScore1 a getScore2 nie su pre triedu Result
 
 console.log("\nZačína druhá tretina!!!\n");
 
@@ -269,3 +272,6 @@ Team1.Wins++;
 Team2.Losses++;
 
 console.log(Team1.getName(), "vyhrala zápas proti ", Team2.getName(), "s tesným výsledkom ", Score.getNO1(), ":", Score.getNO2() );
+
+
+// Zaujimavo pochopena simulacia, je to skor modelovanie konkretneho zapasu, ale beriem :D chcel som aby tie goly a asistencie boli simulovane nahodne
