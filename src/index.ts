@@ -1,13 +1,13 @@
 class TableTennisMatch{     // udaje o finalovom zapase
-     MatchName: string;
-     MatchCountry: string;
-     MatchStyle: string;
-     Player1Name: string;
-     Player1Country: string;
-     Player2Name: string;
-     Player2Country: string;
+    MatchName: string;
+    MatchCountry: string;
+    MatchStyle: string;
+    Player1Name: string;
+    Player1Country: string;
+    Player2Name: string;
+    Player2Country: string;
 
-     constructor(MatchName: string, MatchCountry: string, MatchStyle: string, Player1Name: string, Player1Country: string, Player2Name: string, Player2Country: string) {
+    constructor(MatchName: string, MatchCountry: string, MatchStyle: string, Player1Name: string, Player1Country: string, Player2Name: string, Player2Country: string) {
         this.MatchName = MatchName;
         this.MatchCountry = MatchCountry;
         this.MatchStyle = MatchStyle;
@@ -33,30 +33,35 @@ class TableTennisMatch{     // udaje o finalovom zapase
 
 }
 function Match(){ //simulovanie jednotlivých setov, obaja hráči majú 50% šancu na získanie bodu, hráč vyhráva set ak dosiahne 13 bodov, ak vyhrá 2 sety, vyhráva celý zápas
-console.log('Hra začala');
-console.log("----------------------------------------------------------");
-let Set1ScorePlayer1 = 0;
-let Set1ScorePlayer2 = 0;
-let Set2ScorePlayer1 = 0;
-let Set2ScorePlayer2 = 0;
-let Set3ScorePlayer1 = 0;
-let Set3ScorePlayer2 = 0;
-let hit;
-let vitazset1;
-let vitazset2;
-let vitazset3;
-while (Set1ScorePlayer1 <= 12 && Set1ScorePlayer2 <= 12) {
-    if (hit = Math.random() < 0.5) {
-        Set1ScorePlayer1++;
+    console.log('Hra začala');
+    console.log("----------------------------------------------------------");
+    let Set1ScorePlayer1 = 0;
+    let Set1ScorePlayer2 = 0;
+    let Set2ScorePlayer1 = 0;
+    let Set2ScorePlayer2 = 0;
+    let Set3ScorePlayer1 = 0;
+    let Set3ScorePlayer2 = 0;
+    let hit;
+    let vitazset1;
+    let vitazset2;
+    let vitazset3;
+
+    // ano takto so mto chcel cez while aby sa simuloval zapas sam, ... nie kazdy do takto pochopil :)
+    while (Set1ScorePlayer1 <= 12 && Set1ScorePlayer2 <= 12) {
+        hit = Math.random();
+
+        // Najskor definujeme az tak porovnavame
+        if (hit < 0.5) {
+            Set1ScorePlayer1++;
+        }
+        else  {
+            Set1ScorePlayer2++;
+        }
     }
-    else  {
-        Set1ScorePlayer2++;
-    }
-}
-console.log('Set 1')
-console.log('Počet bodov hráča Liang Jingkun: ' + Set1ScorePlayer1)
-console.log('Počet bodov hráča Truls Moregard: ' + Set1ScorePlayer2)
-console.log("----------------------------------------------------------");
+    console.log('Set 1')
+    console.log('Počet bodov hráča Liang Jingkun: ' + Set1ScorePlayer1)
+    console.log('Počet bodov hráča Truls Moregard: ' + Set1ScorePlayer2)
+    console.log("----------------------------------------------------------");
     if (Set1ScorePlayer1 > Set1ScorePlayer2){
         vitazset1 = 'Liang Jingkun'
     }
@@ -65,7 +70,11 @@ console.log("----------------------------------------------------------");
     }
 
     while (Set2ScorePlayer1 <= 12 && Set2ScorePlayer2 <= 12) {
-        if (hit = Math.random() < 0.5) {
+        hit = Math.random();
+
+        // paci sa mi pouzitie RANDOM metody :)
+        // Najskor definujeme az tak porovnavame
+        if (hit < 0.5) {
             Set2ScorePlayer1++;
         }
         else  {
@@ -83,14 +92,22 @@ console.log("----------------------------------------------------------");
         vitazset2 = 'Truls Moregard'
     }
 
+    // na inspiraciu pouzitie terarneho operatora:
+    // vitazset2 = Set2ScorePlayer1 > Set2ScorePlayer2 ? 'Liang Jingkun' : 'Truls Moregard';
+
     while (Set3ScorePlayer1 <= 12 && Set3ScorePlayer2 <= 12) {
-        if (hit = Math.random() < 0.5) {
+        hit = Math.random();
+
+        // Najskor definujeme az tak porovnavame
+        if (hit < 0.5) {
             Set3ScorePlayer1++;
         }
         else  {
             Set3ScorePlayer2++;
         }
     }
+
+    // Nerozumiem uplne logike :) ani tie if-y nizsie
     if(vitazset1 == 'Liang Jingkun' && vitazset2 == 'Liang Jingkun'){
         console.log('Víťazom sa stáva ' + vitazset1 + '!');
     }
@@ -98,16 +115,16 @@ console.log("----------------------------------------------------------");
         console.log('Víťazom sa stáva ' + vitazset1 + '!');
     }
     else{
-    console.log('Set 3')
-    console.log('Počet bodov hráča Liang Jingkun: ' + Set3ScorePlayer1)
-    console.log('Počet bodov hráča Truls Moregard: ' + Set3ScorePlayer2)
-    console.log("----------------------------------------------------------");
-    if (Set3ScorePlayer1 > Set3ScorePlayer2){
-        vitazset3 = 'Liang Jingkun'
-    }
-    else{
-        vitazset3 = 'Truls Moregard'
-    }
+        console.log('Set 3')
+        console.log('Počet bodov hráča Liang Jingkun: ' + Set3ScorePlayer1)
+        console.log('Počet bodov hráča Truls Moregard: ' + Set3ScorePlayer2)
+        console.log("----------------------------------------------------------");
+        if (Set3ScorePlayer1 > Set3ScorePlayer2){
+            vitazset3 = 'Liang Jingkun'
+        }
+        else{
+            vitazset3 = 'Truls Moregard'
+        }
     }
     if (vitazset1 == 'Liang Jingkun' && vitazset3 == 'Liang Jingkun' && vitazset2 != 'Liang Jingkun'){
 
@@ -115,7 +132,7 @@ console.log("----------------------------------------------------------");
 
     }
     else if (vitazset2 == 'Liang Jingkun' && vitazset3 == 'Liang Jingkun' && vitazset1 != 'Liang Jingkun'){
-               console.log('Víťazom sa stáva hráč ' + vitazset2 + '!');
+        console.log('Víťazom sa stáva hráč ' + vitazset2 + '!');
 
     }
     else if(vitazset1 == 'Truls Moregard' && vitazset3 == 'Truls Moregard' && vitazset2 != 'Truls Moregard'){
@@ -134,10 +151,11 @@ console.log("----------------------------------------------------------");
 }
 
 
+// nie je potrebna staci rovno zavolat match a get..Info
 function Info(match: TableTennisMatch){ //funkcia na zobrazenie v terminali
     match.getMatchInfo();
 
-    }
+}
 
 
 
