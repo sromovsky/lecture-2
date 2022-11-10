@@ -24,7 +24,7 @@ class Person {
 class Player extends Person {
     private PN: number;
     private PartOfTeam: string;
-    public Goals: number;
+    private Goals: number;
 
     constructor(Name: string, Age: number, PN: number, PartOfTeam: string, Goals: number, ) {
         super(Name, Age);
@@ -50,8 +50,10 @@ class Player extends Person {
 // Wins a Losses vyjadrujú počet výhier a prehier za sezónu
 class Team {
     private Name: string;
-    public Wins: number;
-    public Losses: number;
+
+    // nie public ak maju spravene get metody:
+    private Wins: number;
+    private Losses: number;
 
     constructor(Name: string, Wins: number, Losses: number) {
         this.Name = Name;
@@ -76,8 +78,8 @@ class Team {
 // Čísla vyjadrujú skóre tímov počas hry
 // Pomocou tejto classy neskôr vypisujem stav hry na konzolu
 class Scoreboard {
-    public Score1: number;
-    public Score2: number;
+    private Score1: number;
+    private Score2: number;
 
     constructor(Score1: number, Score2: number) {
         this.Score1 = Score1;
@@ -114,6 +116,8 @@ const Team2 = new Team("Vandals", 2, 3);
 
 const Score = new Scoreboard(0, 0);
 
+// trocha inac som si predstavoval simulaciu, chcel som aby ten priebeh zapasu bol nahodny. Ukazeme si na prednaske ako :)
+
 // Úvodný výpis o zápase
 console.log(Team1.getName(), "VS", Team2.getName(), "\n");
 
@@ -128,6 +132,8 @@ console.log("\nThe game begins! The score is ", Score.getScore1(), ":", Score.ge
 
 // Priebeh hry
 // Updatovanie skóre/gólov a výpis  na konzolu
+
+// tu potrebujeme pouzit getter: a v idealnom pripade ten increment obalit do metody ze dal gol alebo pridaj score
 Score.Score2++;
 Player8.Goals++;
 
