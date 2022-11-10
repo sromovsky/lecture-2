@@ -1,3 +1,6 @@
+// Triedy pekne spravene,
+
+
 //Macuha Jakub - bHI2203 - fhi EUBA.
 /* v tomto .ts subore riesim priebeh hokejoveho zapasu
 ako vzor riesenia som naplnil len 5 hracov aby tam toho nebolo too much
@@ -31,7 +34,7 @@ class Person {
 class Hrac extends Person {
 	private id: string;
 	private brank: string;
-	private kapit: boolean = false;
+	private kapit: boolean; // nemusis nastavovat hodnotu tu, ked ju nastavujes v construktore
 	protected goly?: number;
 	protected vyluc?: number;
 
@@ -73,16 +76,25 @@ class Hrac extends Person {
 	}
 
 	private golyIncrement() {
-		if (this.goly == 0) {
+		// if (this.goly == 0) {
+        //     // ak su goly 0 tak mozes zavolat this.goly++ a bude to 1 :)
+		// 	this.goly = 1;
+		// }
+        //
+		// else {
+        //     // goly mozu byt nevyplnene kedze su nepovinny parameter preto to treba osetrit napr. :
+        //     if (this.goly !== undefined) {
+        //         this.goly++;
+        //     }
+		// }
 
-			this.goly = 1;
-		}
-
-		else {
-			this.goly++;
-		}
+        // staci takto:
+        if (this.goly !== undefined) {
+            this.goly++;
+        }
 	}
 
+    // to iste co golyIncrement()
 	dalgol() {
 		this.golyIncrement();
 	}
@@ -91,7 +103,10 @@ class Hrac extends Person {
 			this.vyluc = 1;
 		}
 		else {
-			this.vyluc++;
+            // osetrit undefined
+            if (this.vyluc !== undefined) {
+                this.vyluc++;
+            }
 		}
 	}
 
@@ -450,3 +465,6 @@ for (let i = 0; i < druhg.length; i++)
 {
 	console.log(druhg[i].getName() + " " + druhg[i].getSurame() + " : " + druhg[i].getgoly());
 }
+
+// vela opakujuceho sa kodu, take nieco vzdy obalime do funkcie ktora dostane vstup a spravi s nim to co potrebujes. Ukazeme si na prednaske ako.
+// simulaciu som skor chcel ako nahodny zapas nie ze to bude cele napisane v kode kto co spravil :)
