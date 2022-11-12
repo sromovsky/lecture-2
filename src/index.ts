@@ -3,8 +3,8 @@ Informácie o futbalovom zápase
 Priebeh zápasu
 Výsledok zápasu*/
 
-
-class futbalovyzapas {
+// Nazov tried piseme velkym zaciatocnym pismenom:
+class Futbalovyzapas {
     private krajina: string;
     private liga: string;
     private team1: string;
@@ -52,7 +52,8 @@ class futbalovyzapas {
 //}
 
 
-const futbalovyzapas1 = new futbalovyzapas('slovensko', 'Fortuna ligy','Slovan Bratislava','Spartak Trnava', 'Tehelnom poli' );
+// skoda ze si team nedal ako samostatnu triedu kde by bola metoda ci dal hol alebo nie a dole ako simulaciu by si v cykle zavolal na striedacku a ten bodovy stav by vznikol trocha zaujimavejsi.
+const futbalovyzapas1 = new Futbalovyzapas('slovensko', 'Fortuna ligy','Slovan Bratislava','Spartak Trnava', 'Tehelnom poli' );
 
 //console.log(" Druzstvo Domaci : " + futbalovyzapas1.getkrajina());
 console.log('Začína sa zápas '+ futbalovyzapas1.getliga());
@@ -77,6 +78,8 @@ const random1 = skoreteam(4);
 const random2 = skoreteam(4);
 const final = skoreteam(2) + random1;
 
+
+// paci sa mi ze si aspon bodovy stav nasimuloval nahodne :)
 console.log('Skóre po prvom polčase')
 console.log('Slovan ' + random1 + ':' + random2 + ' Trnava');
 console.log('                           ');
