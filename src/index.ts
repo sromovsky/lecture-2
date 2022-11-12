@@ -1,4 +1,6 @@
 class Player {
+
+    //nazvy fieldov piseme mensie, ale to som na prednaske pred zadanim nespomenul. Nestrhavam body :)
     private Name: string;
     private Surname: string;
     private Age: number;
@@ -50,3 +52,5 @@ class Scoreboard {
 
     }
 }
+
+// triedy vytvorene pekne skoda ze si sa nepohol dalej :/
