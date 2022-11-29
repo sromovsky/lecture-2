@@ -1,14 +1,20 @@
-class Person {
+class Participant {
     private name: string;
-    protected age: number;
+    private age: number;
+    private gender: string;
 
-        constructor(name: string, age: number) {
+        constructor(name: string, gender: string, age: number) {
         this.name = name;
+        this.gender = gender;
         this.age = age;
     }
 
     getAge(): number | undefined {
         return this.age;
+    }
+
+    getGender(): string {
+        return this.gender;
     }
 
     getName(): string {
