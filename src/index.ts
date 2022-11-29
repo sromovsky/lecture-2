@@ -1,8 +1,9 @@
 class Person {
     private name: string;
-    protected age?: number;
+    protected age: number;
 
-    protected constructor(name: string, age?: number) {
+
+        constructor(name: string, age: number) {
         this.name = name;
         this.age = age;
     }
@@ -28,19 +29,19 @@ class Person {
 class Student extends Person {
     private id: string;
 
-    constructor(name: string, id: string, age?: number) {
+    constructor(name: string, id: string, age: number) {
         super(name, age);
         this.id = id;
     }
 
     getId(): string {
-        this.age
+        this.age;
         return this.id;
     }
 }
 class Teacher extends Person {
 
-    constructor(name: string, age?: number) {
+    constructor(name: string, age: number) {
         super(name, age);
     }
 }
