@@ -121,3 +121,4 @@ function start(place: Place): void
 }
 
 start(Ring)
+//
