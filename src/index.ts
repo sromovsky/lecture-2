@@ -1,138 +1,75 @@
-class Person {
+class Swimmer {
+    private id: number;
     private name: string;
-    protected age?: number;
+    private surname: string;
+    private startingNumber: number;
+    private agTime: number; //priemnerny cas v sekundach na 50m
+    private  state: string;
 
-    protected constructor(name: string, age?: number) {
-        this.name = name;
-        this.age = age;
-    }
+    constructor(id: number, name: string, surname: string, startingNumber: number, agTime: number, state: string) {
 
-    getAge(): number | undefined {
-        return this.age;
-    }
-
-    getName(): string {
-        return this.name;
-    }
-
-    private ageIncrement() {
-        if (this.age) {
-            this.age++;
-        }
-    }
-
-    birthday() {
-        this.ageIncrement();
-    }
-}
-class Student extends Person {
-    private id: string;
-
-    constructor(name: string, id: string, age?: number) {
-        super(name, age);
         this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.startingNumber = startingNumber;
+        this.agTime = agTime;
+        this.state = state;
     }
-
-    getId(): string {
-        this.age
+    getid(): number {
         return this.id;
     }
-}
-class Teacher extends Person {
-
-    constructor(name: string, age?: number) {
-        super(name, age);
-    }
-}
-
-class Address {
-    private city: string;
-    private street: string;
-    private number: number;
-
-    constructor(city: string, street: string, number: number) {
-        this.number = number;
-        this.city = city;
-        this.street = street;
-    }
-
-    getCity(): string {
-        return this.city;
-    }
-
-    getStreet(): string {
-        return this.street;
-    }
-
-    getNumber(): number {
-        return this.number;
-    }
-}
-
-class Building {
-    private name: string;
-    private address: Address;
-    private floors: Floor[];
-
-    constructor(name: string, address: Address, floorsCount: number) {
-        this.name = name;
-        this.address = address;
-
-        this.floors = [];
-        for (let i = 0; i <= floorsCount; i++) {
-            this.floors.push(new Floor(i));
-        }
-    }
-
-    getName(): string {
+    getname(): string {
         return this.name;
     }
-
-    getAddress(): string {
-        return `${this.address.getStreet()} ${this.address.getNumber()}, ${this.address.getCity()}`;
+    getsurname(): string {
+        return this.surname;
     }
-
-    getFloor(id: number): Floor | undefined {
-        return this.floors[id];
+    getstartingNumber(): number {
+        return this.startingNumber;
     }
-
-    getRoom(roomId: string): Room | undefined {
-        const floorId = Number(roomId.slice(0, roomId.indexOf('.')));
-        const floor = this.getFloor(floorId);
-        return floor?.getRoom(roomId);
+    getagTime(): number {
+        return this.agTime;
+    }
+    getstate(): string {
+        return this.state;
     }
 }
+class Pool {
+    private swimmer: number;
+    private trackNumber: number;
+    private time: number;
 
-class Room {
-    id: string;
-
-
-    constructor(id: string) {
-        this.id = id;
+    constructor(swimmer: number, trackNumber: number, time: number) {
+        this.swimmer = swimmer;
+        this.trackNumber = trackNumber;
+        this.time = time;
     }
+
+    getswimmer(): number {
+        return this.swimmer;
+    }
+
+    gettrackNumber(): number {
+        return this.trackNumber;
+    }
+
+    gettime(): number {
+        return this.time;
+    }
+
 }
 
-class Floor {
-    id: number;
-    rooms: Room[];
+const swimmer1 = new Swimmer(1, "Jozef", "Mrkvicka", 12, 150, "Slovakia");
+const swimmer2 = new Swimmer(2, "Juraj", "Včerajší ", 10, 145, "Austria");
+const swimmer3 = new Swimmer(3, "Lukáš", "Dnešný", 19, 160, "Czech");
+const swimmer4 = new Swimmer(4, "Matúš", "Pozajtrajší", 8, 130, "Slovakia");
 
-    constructor(id: number) {
-        this.id = id;
+const pool1 = new Pool(1, 1, 178);
+const pool2 = new Pool(2, 2, 155);
+const pool3 = new Pool(3, 3, 168);
+const pool4 = new Pool(4, 4, 143);
 
-        this.rooms = []
-        for (let i = 0; i <= 10; i++) {
-            this.rooms.push(new Room(`${this.id}.${i}`));
-        }
-    }
-
-    getRoom(id: string): Room | undefined {
-        return this.rooms.find(r => r.id === id);
-    }
-}
-
-const address1 = new Address('Bratislava', 'Bajkalská', 28);
-const building1 = new Building('FBC', address1, 16);
-
-console.log(building1.getRoom('3.1'));
-
-building1.getRoom('3.1');
+console.log(swimmer4.getid(), swimmer4.getname(), " is on first place");
+console.log(swimmer2.getid(), swimmer2.getname(), " is on second place");
+console.log(swimmer3.getid(), swimmer3.getname(), " is on third place");
+console.log(swimmer1.getid(), swimmer1.getname(), " is on fourth place");
