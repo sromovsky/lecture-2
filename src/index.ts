@@ -1,138 +1,55 @@
-class Person {
-    private name: string;
-    protected age?: number;
+class Match {
+    // atribúty zápasu
+    private team1: string;
+    private team2: string;
+    private score1: number;
+    private score2: number;
 
-    protected constructor(name: string, age?: number) {
-        this.name = name;
-        this.age = age;
+    // konštruktor pre inicializáciu atribútov
+    constructor(team1: string, team2: string) {
+        this.team1 = team1;
+        this.team2 = team2;
+        this.score1 = 0;
+        this.score2 = 0;
     }
 
-    getAge(): number | undefined {
-        return this.age;
+    // metóda na získanie informácií o zápase
+    public getInfo(): string {
+        return `Zápas medzi tímami ${this.team1} a ${this.team2}`;
     }
 
-    getName(): string {
-        return this.name;
-    }
-
-    private ageIncrement() {
-        if (this.age) {
-            this.age++;
+    // metóda na aktualizáciu skóre
+    public updateScore(team: string, score: number): void {
+        if (team === this.team1) {
+            this.score1 += score;
+        } else if (team === this.team2) {
+            this.score2 += score;
         }
     }
 
-    birthday() {
-        this.ageIncrement();
-    }
-}
-class Student extends Person {
-    private id: string;
-
-    constructor(name: string, id: string, age?: number) {
-        super(name, age);
-        this.id = id;
-    }
-
-    getId(): string {
-        this.age
-        return this.id;
-    }
-}
-class Teacher extends Person {
-
-    constructor(name: string, age?: number) {
-        super(name, age);
-    }
-}
-
-class Address {
-    private city: string;
-    private street: string;
-    private number: number;
-
-    constructor(city: string, street: string, number: number) {
-        this.number = number;
-        this.city = city;
-        this.street = street;
-    }
-
-    getCity(): string {
-        return this.city;
-    }
-
-    getStreet(): string {
-        return this.street;
-    }
-
-    getNumber(): number {
-        return this.number;
-    }
-}
-
-class Building {
-    private name: string;
-    private address: Address;
-    private floors: Floor[];
-
-    constructor(name: string, address: Address, floorsCount: number) {
-        this.name = name;
-        this.address = address;
-
-        this.floors = [];
-        for (let i = 0; i <= floorsCount; i++) {
-            this.floors.push(new Floor(i));
+    // metóda na zistenie výsledku zápasu alebo remízy
+    public getResult(): string {
+        if (this.score1 > this.score2) {
+            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team1}`;
+        } else if (this.score2 > this.score1) {
+            return `Výsledok zápasu je ${this.score1}:${this.score2} pre tím ${this.team2}`;
+        } else {
+            return "Zápas skončil remízou";
         }
     }
-
-    getName(): string {
-        return this.name;
-    }
-
-    getAddress(): string {
-        return `${this.address.getStreet()} ${this.address.getNumber()}, ${this.address.getCity()}`;
-    }
-
-    getFloor(id: number): Floor | undefined {
-        return this.floors[id];
-    }
-
-    getRoom(roomId: string): Room | undefined {
-        const floorId = Number(roomId.slice(0, roomId.indexOf('.')));
-        const floor = this.getFloor(floorId);
-        return floor?.getRoom(roomId);
-    }
 }
 
-class Room {
-    id: string;
+// vytvorenie nového zápasu s tímami Team1 a Team2
+const match = new Match("Team1", "Team2");
+
+// výpis informácií o zápase
+console.log(match.getInfo());
+
+// aktualizácia skóre pre oba tímy
+match.updateScore("Team1", 3);
+match.updateScore("Team2", 2);
+
+// výpis výsledku zápasu
+console.log(match.getResult());
 
 
-    constructor(id: string) {
-        this.id = id;
-    }
-}
-
-class Floor {
-    id: number;
-    rooms: Room[];
-
-    constructor(id: number) {
-        this.id = id;
-
-        this.rooms = []
-        for (let i = 0; i <= 10; i++) {
-            this.rooms.push(new Room(`${this.id}.${i}`));
-        }
-    }
-
-    getRoom(id: string): Room | undefined {
-        return this.rooms.find(r => r.id === id);
-    }
-}
-
-const address1 = new Address('Bratislava', 'Bajkalská', 28);
-const building1 = new Building('FBC', address1, 16);
-
-console.log(building1.getRoom('3.1'));
-
-building1.getRoom('3.1');
