@@ -1,31 +1,52 @@
-class TennisMatch{
-    MatchName: string;
-    MatchCountry: string;
-    Player1Name: string;
-    Player1Country: string;
-    Player2Name: string;
-    Player2Country: string;
+class Runner {
+    private id: number;
+    private name: string;
+    private surname: string;
+    private  state: string;
 
-    constructor(MatchName: string, MatchCountry: string, MatchStyle: string, Player1Name: string, Player1Country: string, Player2Name: string, Player2Country: string) {
-        this.MatchName = MatchName;
-        this.MatchCountry = MatchCountry;
-        this.Player1Name = Player1Name;
-        this.Player1Country = Player1Country;
-        this.Player2Name = Player2Name;
-        this.Player2Country = Player2Country;
+    constructor(id: number, name: string, surname: string, state: string) {
 
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.state = state;
     }
-
-    getMatchInfo(){
-        console.log(`Začína sa futbalový zápas turnaja: ${this.MatchName}`);
-        console.log(`Zápas sa koná v krajine: ${this.MatchCountry}`);
-        console.log("----------------------------------------------------------");
-        console.log(`Meno prvého futbalistu je: ${this.Player1Name}`);
-        console.log(`Prvý futbalista pochádza z: ${this.Player1Country}`);
-        console.log("---");
-        console.log(`Meno druhého futbalista je: ${this.Player2Name}`);
-        console.log(`Druhý futbalista pochádza z: ${this.Player2Country}`);
-        console.log("----------------------------------------------------------");
+    getid(): number {
+        return this.id;
     }
-
+    getname(): string {
+        return this.name;
+    }
+    getsurname(): string {
+        return this.surname;
+    }
+    getstate(): string {
+        return this.state;
+    }
 }
+class Pool {
+    private runner: number;
+    private trackNumber: number;
+    private time: number;
+
+    constructor(runner: number, trackNumber: number, time: number) {
+        this.runner = runner;
+        this.trackNumber = trackNumber;
+        this.time = time;
+    }
+}
+
+const runner1 = new Runner(1, "Filip", "Ozvat","Serbia");
+const runner2 = new Runner(2, "Ines", "Gedra ", "Austria");
+const runner3 = new Runner(3, "Nikola", "Marijanović", "Croatia");
+
+
+const pool1 = new Pool(1, 1, 178);
+const pool2 = new Pool(2, 2, 155);
+const pool3 = new Pool(3, 3, 168);
+const pool4 = new Pool(4, 4, 143);
+
+
+console.log(runner2.getid(), runner2.getname(), " is on second place");
+console.log(runner3.getid(), runner3.getname(), " is on third place");
+console.log(runner1.getid(), runner1.getname(), " is on first place");
