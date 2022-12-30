@@ -24,7 +24,7 @@ class Runner {
         return this.state;
     }
 }
-class Pool {
+class RaceTrack {
     private runner: number;
     private trackNumber: number;
     private time: number;
@@ -41,10 +41,6 @@ const runner2 = new Runner(2, "Ines", "Gedra ", "Austria");
 const runner3 = new Runner(3, "Nikola", "Marijanović", "Croatia");
 
 
-const pool1 = new Pool(1, 1, 178);
-const pool2 = new Pool(2, 2, 155);
-const pool3 = new Pool(3, 3, 168);
-const pool4 = new Pool(4, 4, 143);
 
 
 console.log(runner2.getid(), runner2.getname(), " is on second place");
